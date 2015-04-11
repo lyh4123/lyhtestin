@@ -1,6 +1,7 @@
 package com.coolweather.app.activity;
 
 import com.coolweather.app.R;
+import com.coolweather.app.service.AutoUpdateService;
 import com.coolweather.app.util.HttpCallbackListener;
 import com.coolweather.app.util.HttpUtil;
 import com.coolweather.app.util.Utility;
@@ -159,6 +160,8 @@ public class WeatherActivity extends Activity implements OnClickListener {
 		currentDateText.setText(prefs.getString("current_time", ""));
 		weatherInfoLayout.setVisibility(View.VISIBLE);
 		cityNameText.setVisibility(View.VISIBLE);
+		Intent intent = new Intent(this, AutoUpdateService.class);
+		startService(intent);
 	}
 
 	@Override
@@ -166,14 +169,15 @@ public class WeatherActivity extends Activity implements OnClickListener {
 		switch (v.getId()) {
 		case R.id.refresh_weather:
 			publishText.setText("Í¬²½ÖÐ...");
-			SharedPreferences prefs=PreferenceManager.getDefaultSharedPreferences(this);
-			String weatherCode=prefs.getString("weather_code", "");
-			if(!TextUtils.isEmpty(weatherCode)){
+			SharedPreferences prefs = PreferenceManager
+					.getDefaultSharedPreferences(this);
+			String weatherCode = prefs.getString("weather_code", "");
+			if (!TextUtils.isEmpty(weatherCode)) {
 				queryWeatherInfo(weatherCode);
 			}
 			break;
 		case R.id.switch_city:
-			Intent intent=new Intent(this,ChooseAreaActivity.class);
+			Intent intent = new Intent(this, ChooseAreaActivity.class);
 			intent.putExtra("from_weather_activity", true);
 			startActivity(intent);
 			finish();
